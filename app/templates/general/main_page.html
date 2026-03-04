@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='general/css/main.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <header class="main-header">
+            <h1>Добро пожаловать!</h1>
+        </header>
+
+        <main class="main-content">
+            <p>Это главная страница нашего приложения.</p>
+            
+            <!-- Старый функционал остаётся -->
+            <button id="testApiBtn" class="action-btn">Проверить API</button>
+            <div id="apiStatus" class="status-message"></div>
+
+            <!-- Новые кнопки: Вход и Регистрация -->
+            <div class="auth-buttons">
+                <a href="/login" class="auth-btn login-btn">Вход</a>
+                <a href="/register" class="auth-btn register-btn">Регистрация</a>
+            </div>
+        </main>
+
+        <footer class="main-footer">
+            <p>&copy; 2026 Наше приложение</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='general/js/main.js') }}"></script>
+</body>
+</html>
