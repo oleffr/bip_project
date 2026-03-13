@@ -1,0 +1,11 @@
+Subject: Your order #123456 has been confirmed
+Body: Dear Customer,
+Thank you for shopping with us! Your order #123456 has been successfully processed.
+Items:
+- Wireless Mouse (x1) – $25.99
+- USB-C Cable (x2) – $15.98
+Total: $41.97
+Estimated delivery: March 20-25.
+You can track your order here: https://www.onlinestore.com/track/123456
+Sincerely,
+The Online Store Team

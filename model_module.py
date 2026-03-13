@@ -41,7 +41,6 @@ CONFIG_NAME = "combined_reduced"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(FINAL_MODEL_DIR, exist_ok=True)
 
-# Фиксация генераторов случайных чисел для воспроизводимости
 np.random.seed(RANDOM_SEED)
 torch.manual_seed(RANDOM_SEED)
 
@@ -253,10 +252,9 @@ print("Метрики на тесте:")
 for key, value in test_results.metrics.items():
     print(f"  {key}: {value:.4f}")
 
-# Сохраним предсказания для дальнейшего анализа
 y_true = test_results.label_ids
 y_pred = np.argmax(test_results.predictions, axis=1)
-# Вероятности для ROC (если бинарная классификация)
+# Вероятности для ROC
 if num_labels == 2:
     y_scores = torch.softmax(torch.tensor(test_results.predictions), dim=1).numpy()[:, 1]
 else:
