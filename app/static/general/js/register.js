@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Перенаправляем через 1.5 секунды
                 setTimeout(() => {
                     window.location.href = redirectUrl;
-                }, 1500);
+                }, 150);
             } else {
                 showMessage(data.message || 'Ошибка регистрации', 'error');
                 submitBtn.disabled = false; // Разблокируем кнопку при ошибке

@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Выполняем перенаправление через 1.5 секунды
                 setTimeout(() => {
                     window.location.href = redirectUrl;
-                }, 1500);
+                }, 150);
             } else {
                 loginStatus.textContent = data.message || 'Неверные логин или пароль';
                 loginStatus.className = 'status-message error';

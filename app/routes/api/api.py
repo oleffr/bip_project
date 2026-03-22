@@ -3,6 +3,8 @@ from flask import jsonify, redirect, url_for, request, session
 
 api_routes = Blueprint('api', __name__)
 from ..total_pages_functions import login_required
+from ...models.data_bases.admins import Admins
+from ...models.data_bases.user_lk import User_lk
 #Чисто проверка, что api работает
 @api_routes.route("/ping", methods=["GET"])
 def check_route_enable():
@@ -20,9 +22,11 @@ def get_user_info():
 def login():
     data = request.json
     print(data)
-    if data["username"] == "admin" and data["password"] == "admin":
+    db_admins = Admins()
+    db_users = User_lk()
+    if data["username"] == db_admins and db_admins.check_pass(data["username"], data["password"]):
         return jsonify({'success':True,'redirect_url':'/admin/admin_lk'})
-    elif data["username"] == "user" and data["password"] == "user":
+    elif db_users.check_pass(data["username"], data["password"])==True:
         return jsonify({'success':True,'redirect_url':'/user/user_lk'})
     return jsonify({'success':False})
 
