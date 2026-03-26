@@ -5,7 +5,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from typing import Tuple
 
 # Константы
-DEFAULT_MODEL_PATH = "./final_model"  
+DEFAULT_MODEL_PATH = "D:\\vas\\БИП\\bip_project\\test_ml\\final_model_test"
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 _tokenizer = None

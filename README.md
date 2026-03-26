@@ -36,3 +36,9 @@ git lfs migrate import --include="*.safetensors" --everything
 ```
 git push --force origin ai-branch
 ```
+
+---
+
+Смотреть внимательно название модели!! И ее папку!!!
+MODEL_NAME = "xlm-roberta-base"
+DEFAULT_MODEL_PATH = "D:\\vas\\БИП\\bip_project\\test_ml\\final_model_test"
