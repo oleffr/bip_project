@@ -12,10 +12,10 @@ load_dotenv()
 
 # Подключаем модуль классификации
 try:
-    from predict_module import predict, predict_proba
+    from predict_module import predict_with_threshold, preprocess_email
 except ImportError:
     sys.path.append(os.path.dirname(__file__))
-    from predict_module import predict, predict_proba
+    from predict_module import predict_with_threshold, preprocess_email
 
 logging.basicConfig(
     level=logging.INFO,
@@ -38,6 +38,8 @@ class MailRuProcessor:
         self.port = imap_port
         self.mailbox: Optional[MailBox] = None
         self.spam_folder: Optional[str] = None
+        self.threshold = 0.9995
+        self.temperature = 1
 
     def connect(self) -> bool:
         """Устанавливает соединение с почтовым сервером"""
@@ -116,20 +118,28 @@ class MailRuProcessor:
 
         logging.info(f"Найдено непрочитанных писем: {len(messages)}")
 
+
+
         for msg in messages:
             try:
+
+                
                 # Собираем полный текст письма (тема + тело)
                 subject = msg.subject or ""
                 body = self.get_message_text(msg)
                 full_text = f"{subject}\n{body}"
                 logging.info(f"FULL_TEXT for UID {msg.uid}:\n{full_text[:500]}")
-
+                full_text = preprocess_email(full_text)
                 # Получаем предсказание модели
-                is_spam = predict(full_text)
-                probability = predict_proba(full_text)
+                is_spam, probability = predict_with_threshold(
+                        full_text,
+                        threshold=self.threshold,
+                        temperature=self.temperature
+                    )
 
                 logging.info(f"Письмо: {subject[:50]}... | Спам: {is_spam} | Вероятность: {probability:.4f}")
-
+                if probability > 0.999:
+                    logging.warning(f"СЛИШКОМ УВЕРЕННО: {probability}")
                 if is_spam and self.spam_folder:
                     # Перемещаем в спам
                     self.mailbox.move(msg.uid, self.spam_folder)
