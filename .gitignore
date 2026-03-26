@@ -4,7 +4,6 @@ venv/
 .env/
 .env.*
 .venv/
-final_model_test
 combined_reduced.json
 results_test
 
