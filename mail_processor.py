@@ -12,10 +12,14 @@ load_dotenv()
 
 # Подключаем модуль классификации
 try:
-    from predict_module import predict_with_threshold, preprocess_email
+    from predict_module import predict_with_threshold
+    from email_parser import parse_email
+    from wb_lists import analyze_urls
 except ImportError:
     sys.path.append(os.path.dirname(__file__))
-    from predict_module import predict_with_threshold, preprocess_email
+    from predict_module import predict_with_threshold
+    from email_parser import parse_email
+    from wb_lists import analyze_urls
 
 logging.basicConfig(
     level=logging.INFO,
@@ -125,11 +129,14 @@ class MailRuProcessor:
 
                 
                 # Собираем полный текст письма (тема + тело)
-                subject = msg.subject or ""
-                body = self.get_message_text(msg)
-                full_text = f"{subject}\n{body}"
-                logging.info(f"FULL_TEXT for UID {msg.uid}:\n{full_text[:500]}")
-                full_text = preprocess_email(full_text)
+                parsed = parse_email(msg)
+
+                logging.info(f"SENDER: {parsed['sender']}")
+                logging.info(f"RECIPIENTS: {parsed['recipients']}")
+                logging.info(f"SUBJECT: {parsed['subject']}")
+                logging.info(f"LINKS: {parsed['links'][:3]}")
+
+                full_text = parsed["text"]
                 # Получаем предсказание модели
                 is_spam, probability = predict_with_threshold(
                         full_text,
@@ -137,14 +144,20 @@ class MailRuProcessor:
                         temperature=self.temperature
                     )
 
-                logging.info(f"Письмо: {subject[:50]}... | Спам: {is_spam} | Вероятность: {probability:.4f}")
+                logging.info(f"Письмо: {parsed['subject'][:50]}... | Спам: {is_spam} | Вероятность: {probability:.4f}")
                 if probability > 0.999:
                     logging.warning(f"СЛИШКОМ УВЕРЕННО: {probability}")
-                if is_spam and self.spam_folder:
+                
+                url_analysis = analyze_urls(parsed["links"])
+                is_phishing = url_analysis["phishing"]
+                # logging.info(f"Is_phishing: {is_phishing}, details {url_analysis['details']}")
+                final_spam = is_spam or is_phishing
+
+                if final_spam and self.spam_folder:
                     # Перемещаем в спам
                     self.mailbox.move(msg.uid, self.spam_folder)
                     logging.info(f"Письмо (UID: {msg.uid}) перемещено в папку {self.spam_folder}")
-                elif is_spam and not self.spam_folder:
+                elif final_spam and not self.spam_folder:
                     # Если папка спама не найдена, хотя бы помечаем флагом
                     self.mailbox.flag(msg.uid, '\\Flagged', True)
                     logging.warning(f"Папка спама не найдена, письмо помечено флагом")
