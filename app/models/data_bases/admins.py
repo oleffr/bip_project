@@ -1,7 +1,8 @@
 class Admins:
     """
-    Отдельно класс для таблицы с админами
+    Отдельно класс для таблицы с админами. Пока считаем, что админы "статичны"
 """
+    data = [{"username":"admin", "password":"admin"}]
     def __init__(self):
         pass
 
@@ -15,13 +16,9 @@ class Admins:
         data-словарь с данными о пользователе
         """
         pass
-    def delete_iser(self, username: str):
-        pass
-
-    def __contains__(self, item):
-        #Method in
-        if item == "admin":
-            return True
-        return False
     def check_pass(self, username, password):
-        pass
+        for i in self.data:
+            if i["username"] == username:
+                if i["password"] == password:
+                    return True
+        return False

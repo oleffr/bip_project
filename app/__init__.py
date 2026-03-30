@@ -19,6 +19,7 @@ class App:
         self.app.register_blueprint(self.bp.user, url_prefix = "/user")
         self.app.register_blueprint(self.bp.general, url_prefix = "/")
         self.app.register_blueprint(self.bp.api, url_prefix = "/api")
+        self.app.register_blueprint(self.bp.oauth, url_prefix = "/oauth")
     
     def run_app(self, host = "localhost", port=5000):
         self.app.run(host=host, port=port)

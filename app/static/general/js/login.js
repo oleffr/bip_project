@@ -73,4 +73,5 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = false; // Разблокируем кнопку в любом случае ошибки
         }
     });
+
 });

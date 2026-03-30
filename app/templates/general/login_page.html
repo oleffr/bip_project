@@ -1,46 +1,66 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход в систему</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='general/css/login.css') }}">
+    <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
 </head>
+
 <body>
+<script>
+
+
+                    YaAuthSuggest.init(
+                        {
+                            client_id: 'b4716e5dcbd2436a84aac8baa1ef358d',
+                            response_type: 'token'
+
+                        },
+                        "http://localhost:5000",
+                        {
+                            view: "button",
+                            parentId: "container",
+                            buttonSize: 'm',
+                            buttonView: 'main',
+                            buttonTheme: 'light',
+                            buttonBorderRadius: "0",
+                            buttonIcon: 'ya',
+                        }
+                    )
+                        .then(({ handler }) => handler())
+                        .then(data => console.log('Сообщение с токеном', data))
+                        .catch(error => console.log('Обработка ошибки', error))
+
+
+                </script>
     <div class="login-container">
         <div class="login-form">
             <h1>Вход в систему</h1>
-            
+
             <form id="loginForm">
                 <div class="form-group">
                     <label for="username">Логин:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        placeholder="Введите логин"
-                        required
-                    >
+                    <input type="text" id="username" name="username" placeholder="Введите логин" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="password">Пароль:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Введите пароль"
-                        required
-                    >
+                    <input type="password" id="password" name="password" placeholder="Введите пароль" required>
                 </div>
-                
+
                 <button type="submit" class="login-btn">Войти</button>
+                
             </form>
-            
+
             <div id="loginStatus" class="status-message"></div>
+            <div  id="container"></div>
         </div>
     </div>
 
     <script src="{{ url_for('static', filename='general/js/login.js') }}"></script>
 </body>
+
 </html>

@@ -9,4 +9,4 @@ user_pages_routes = Blueprint('user', __name__)
 @login_required(role="user")
 def check_route_enable():
     print(session["username"])
-    return render_template("/user/index.html")
+    return render_template("/user/user_lk.html")

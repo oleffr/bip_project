@@ -22,21 +22,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (data.success) {
                     apiStatus.textContent = 'API работает корректно!';
-            apiStatus.className = 'status-message success';
+                    apiStatus.className = 'status-message success';
                 } else {
                     apiStatus.textContent = 'API вернул ошибку: ' + (data.message || 'Неизвестная ошибка');
-            apiStatus.className = 'status-message error';
+                    apiStatus.className = 'status-message error';
                 }
             } catch (error) {
                 console.error('Ошибка при проверке API:', error);
                 apiStatus.textContent = 'Ошибка подключения к API. Проверьте сервер.';
-            apiStatus.className = 'status-message error';
+                apiStatus.className = 'status-message error';
             }
         });
     }
 
     // Дополнительная функциональность для кнопок авторизации (опционально)
-    // Можно добавить анимации или логирование нажатий
     const loginBtn = document.querySelector('.auth-btn.login-btn');
     const registerBtn = document.querySelector('.auth-btn.register-btn');
 

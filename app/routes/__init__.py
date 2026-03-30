@@ -6,6 +6,7 @@ from .api.api import api_routes
 from .pages.admin_pages import admin_pages_routes
 from .pages.user_pages import user_pages_routes
 from .pages.general_pages import general_routes
+from .oauth.oauth_routes import oauth_routes
 
 @dataclass
 class AppBlueprints:
@@ -16,3 +17,4 @@ class AppBlueprints:
     admin = admin_pages_routes
     user = user_pages_routes
     general = general_routes
+    oauth = oauth_routes
