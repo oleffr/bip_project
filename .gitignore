@@ -1,0 +1,10 @@
+.env
+*.log
+__pycache__/
+packages/
+*.zip
+*.safetensors
+llm-service/final_model/
+llm-service/test_ml/final_model_test/
+llm-service/test_ml/emails_0/*.eml
+llm-service/test_ml/emails_1/*.eml

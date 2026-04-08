@@ -1,0 +1,7 @@
+Subject: Your PayPal account has been limited
+Body: Dear Customer,
+We have detected unusual activity on your account. To restore full access, please verify your information immediately:
+http://paypal-security-verify.com/logi
+Failure to do so within 24 hours will result in permanent account restriction.
+Thank you,
+PayPal Security Team

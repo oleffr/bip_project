@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет пользователя</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='user/css/user_lk.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>Личный кабинет</h1>
+            <p>Добро пожаловать, пользователь!</p>
+        </header>
+
+        <main class="dashboard-main">
+            <section class="server-status">
+                <h2>Дополнительные параметры</h2>
+                <button id="checkServerBtn" class="btn">Проверить доступность сервера</button>
+                <div id="serverStatus" class="status-message"></div>
+                <form action="/api/logout" method="POST" id="logoutForm">
+                <button id="logoutBtn" class="logout-btn">Выйти</button>
+                </form>
+            </section>
+
+            <section class="user-info">
+                <h2>Добавленные почты</h2>
+    <div id="emailsList" class="emails-list">
+        <!-- Список почт будет загружаться динамически -->
+        <p class="empty-message">Почты не добавлены</p>
+    </div>
+            </section>
+            
+<section class="add-email-form">
+    <h2>Добавить новую почту</h2>
+    <form id="emailForm" class="email-form">
+        <div class="form-group">
+            <label for="emailInput" class="form-label">Почта:</label>
+            <input type="email" id="emailInput" name="email" class="form-input" required>
+        </div>
+        <div class="form-group">
+            <label for="passwordInput" class="form-label">Пароль:</label>
+            <input type="password" id="passwordInput" name="password" class="form-input" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить почту</button>
+    </form>
+    <div id="formMessage" class="form-message"></div>
+</section>
+        </main>
+
+        <footer class="dashboard-footer">
+            <p>Личный кабинет &copy; 2026</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='user/js/user_lk.js') }}"></script>
+</body>
+</html>

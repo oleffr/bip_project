@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/css/admin.css') }}">
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Админ-панель</h1>
+
+        <div class="check-section">
+            <h2>Проверка пользователя</h2>
+            <form id="userCheckForm">
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Введите логин"
+                    required
+                >
+                <button type="submit">Проверить</button>
+            </form>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='admin/js/admin.js') }}"></script>
+</body>
+</html>

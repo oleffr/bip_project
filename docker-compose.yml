@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # 1. База данных PostgreSQL
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # Порты не открываем наружу (безопасность)
+
+  # 2. Flask приложение (Backend)
+  flask-app:
+    build:
+        context: ./flask-app
+        network: host
+    container_name: flask_app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      LLM_API_URL: http://llm-service:8000
+    networks:
+      - app_network
+    volumes:
+      - ./flask-app:/app
+    # Порты не открываем наружу — всё через Nginx
+
+  # 3. AI/LM сервис (Пока просто заглушка, если нет кода)
+  llm-service:
+    build: ./llm-service
+    container_name: llm_service
+    restart: unless-stopped
+    network_mode: host
+
+    environment:
+      MAILRU_EMAIL: ${MAILRU_EMAIL}
+      MAILRU_PASSWORD: ${MAILRU_PASSWORD}
+      PORT: 8000
+    #networks:
+     # - app_network
+    #dns:
+     # - 8.8.8.8
+      #- 8.8.4.4
+    volumes:
+      - ./llm-service:/app
+    # Если есть GPU, добавь секцию deploy, но пока не надо
+
+  # 4. Nginx (Reverse Proxy) — единственный вход извне
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - flask-app
+      - llm-service
+    networks:
+      - app_network
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com   # Логин для входа
+      PGADMIN_DEFAULT_PASSWORD: admin            # Пароль
+    ports:
+      - "5050:80"   # Проброс порта: на хосте 5050, в контейнере 80
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

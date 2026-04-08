@@ -1,0 +1,18 @@
+**/.DS_Store
+# Виртуальное окружение
+venv/
+.env/
+.env.*
+.venv/
+combined_reduced.json
+results_test
+
+# Кэш Python
+__pycache__/
+*.pyc
+
+# Файлы с секретами и локальными настройками
+.env
+*.env
+mail_processor.log
+spam_check.log
