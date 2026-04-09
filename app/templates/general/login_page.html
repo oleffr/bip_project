@@ -10,32 +10,73 @@
 </head>
 
 <body>
-<script>
+    <script>
 
 
-                    YaAuthSuggest.init(
-                        {
-                            client_id: 'b4716e5dcbd2436a84aac8baa1ef358d',
-                            response_type: 'token'
+        YaAuthSuggest.init(
+            {
+                client_id: 'b4716e5dcbd2436a84aac8baa1ef358d',
+                response_type: 'token',
+                redirect_uri: "https://biplabproject.ru/oauth/oauth_callback"
 
-                        },
-                        "http://localhost:5000",
-                        {
-                            view: "button",
-                            parentId: "container",
-                            buttonSize: 'm',
-                            buttonView: 'main',
-                            buttonTheme: 'light',
-                            buttonBorderRadius: "0",
-                            buttonIcon: 'ya',
+            },
+            "https://biplabproject.ru",
+            {
+                view: "button",
+                parentId: "container",
+                buttonSize: 'm',
+                buttonView: 'main',
+                buttonTheme: 'light',
+                buttonBorderRadius: "0",
+                buttonIcon: 'ya',
+            }
+        )
+            .then(({ handler }) => handler())
+            .then(data => {
+                // Формируем тело запроса
+                const requestBody = {
+                    type: "oauth",
+                    data: data
+                };
+
+                // Отправляем POST‑запрос
+                fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Ошибка сети: ' + response.status);
                         }
-                    )
-                        .then(({ handler }) => handler())
-                        .then(data => console.log('Сообщение с токеном', data))
-                        .catch(error => console.log('Обработка ошибки', error))
+                        return response.json();
+                    })
+                    .then(serverResponse => {
+                        console.log('Ответ сервера:', serverResponse);
+
+                        // Логика перенаправления на основе ответа сервера
+                        if (serverResponse.redirect_url) {
+                            // Перенаправляем на URL, указанный сервером
+                            window.location.href = serverResponse.redirect_url;
+                        } else if (serverResponse.success) {
+                            // Если сервер вернул успех без указания URL — идём на стандартную страницу
+                            window.location.href = '/';
+                        } else {
+                            // В случае, если сервер вернул какой‑то другой статус — идём на страницу ошибки
+                            window.location.href = '/auth-error';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при выполнении POST‑запроса:', error);
+                        window.location.href = '/auth-error';
+                    });
+            })
+            .catch(error => console.log('Обработка ошибки', error))
 
 
-                </script>
+    </script>
     <div class="login-container">
         <div class="login-form">
             <h1>Вход в систему</h1>
@@ -52,11 +93,11 @@
                 </div>
 
                 <button type="submit" class="login-btn">Войти</button>
-                
+
             </form>
 
             <div id="loginStatus" class="status-message"></div>
-            <div  id="container"></div>
+            <div id="container"></div>
         </div>
     </div>
 

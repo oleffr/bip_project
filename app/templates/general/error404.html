@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ой, страница потерялась! — Ошибка 404</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='errors/css/error404.css') }}">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-content">
+            <h1>404</h1>
+            <div class="error-illustration">
+                <div class="cat">
+                    <div class="ears"></div>
+                    <div class="face">
+                        <div class="eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                </div>
+                <div class="whiskers">
+                    <div class="whisker"></div>
+                    <div class="whisker"></div>
+            </div>
+            <div class="mouth"></div>
+        </div>
+    </div>
+
+            <h2>Страница убежала!</h2>
+            <p>Похоже, эта страница решила отправиться в путешествие по интернету...</p>
+            <p class="redirect-timer">Через <span id="countdown">5</span> секунд мы отправим вас домой!</p>
+
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+
+            <a href="/" class="home-link">Перейти на главную сейчас</a>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='errors/js/error404.js') }}"></script>
+</body>
+</html>

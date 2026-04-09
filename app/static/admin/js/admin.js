@@ -1,45 +1,91 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('userCheckForm');
-    const resultDiv = document.getElementById('result');
+    const tokensList = document.getElementById('tokensList');
+    const loader = document.getElementById('tokensLoader');
 
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    // Обработчик для формы выхода
+    const logoutForm = document.getElementById('logoutForm');
+    if (logoutForm) {
+        logoutForm.addEventListener('submit', function(e) {
+            // Можно добавить подтверждение выхода
+            if (!confirm('Вы уверены, что хотите выйти из админ‑панели?')) {
+                e.preventDefault();
+                return;
+            }
+            // Форма будет отправлена на /api/logout согласно атрибутам action и method
+        });
+    }
 
-        const username = document.getElementById('username').value.trim();
-
-        // Очищаем предыдущее сообщение и показываем загрузку
-        resultDiv.textContent = 'Проверка...';
-        resultDiv.className = 'result';
+    // Функция для загрузки списка токенов
+    async function loadTokens() {
+        // Показываем загрузчик
+        loader.style.display = 'block';
+        tokensList.innerHTML = '';
 
         try {
-            // Отправляем запрос к бэкенду
-            const response = await fetch('/api/get_user', {
-                method: 'POST',
+            const response = await fetch('/api/get_users_tokens', {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username: username })
+                    'Content-Type': 'application/json'
+                }
             });
 
-            // Проверяем статус ответа
             if (!response.ok) {
                 throw new Error(`Ошибка сервера: ${response.status}`);
             }
 
             const data = await response.json();
 
-            // Обрабатываем ответ от бэкенда
-            if (data.exists) {
-                resultDiv.textContent = `Пользователь "${username}" найден!`;
-                resultDiv.className = 'result success';
+            // Скрываем загрузчик
+            loader.style.display = 'none';
+
+            // Проверяем результат
+            if (data.result === true && data.tokens && data.tokens.length > 0) {
+                // Отображаем список токенов
+                tokensList.innerHTML = data.tokens.map(token => `
+                    <div class="token-item">
+                <span class="token-value">${token}</span>
+                <button class="copy-btn" data-token="${token}">Копировать</button>
+            </div>
+        `).join('');
+
+                // Добавляем обработчики для кнопок копирования
+                document.querySelectorAll('.copy-btn').forEach(button => {
+                    button.addEventListener('click', handleCopyToken);
+                });
             } else {
-                resultDiv.textContent = `Пользователь "${username}" не найден.`;
-                resultDiv.className = 'result error';
+                // Если токенов нет
+                tokensList.innerHTML = '<div class="no-tokens">Токены не найдены</div>';
             }
         } catch (error) {
-            console.error('Ошибка при проверке пользователя:', error);
-            resultDiv.textContent = 'Ошибка при проверке. Попробуйте снова.';
-            resultDiv.className = 'result error';
+            console.error('Ошибка при загрузке токенов:', error);
+            loader.style.display = 'none';
+            tokensList.innerHTML = `
+                <div class="error-message">
+                    Ошибка загрузки токенов. Проверьте подключение к серверу.
+                </div>
+            `;
         }
-    });
+    }
+
+    // Обработчик копирования токена
+    function handleCopyToken(e) {
+        const token = e.target.getAttribute('data-token');
+
+        navigator.clipboard.writeText(token)
+            .then(() => {
+                // Визуальная обратная связь
+                const originalText = e.target.textContent;
+                e.target.textContent = 'Скопировано!';
+                setTimeout(() => {
+                    e.target.textContent = originalText;
+                }, 2000);
+            })
+            .catch(err => {
+                console.error('Ошибка копирования в буфер:', err);
+                alert('Не удалось скопировать токен. Используйте Ctrl+C.');
+            });
+    }
+
+    // Загружаем токены при загрузке страницы
+    loadTokens();
 });

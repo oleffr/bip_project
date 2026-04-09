@@ -10,18 +10,17 @@
     <div class="admin-container">
         <h1>Админ-панель</h1>
 
-        <div class="check-section">
-            <h2>Проверка пользователя</h2>
-            <form id="userCheckForm">
-                <input
-                    type="text"
-                    id="username"
-                    placeholder="Введите логин"
-                    required
-                >
-                <button type="submit">Проверить</button>
+        <!-- Кнопка выхода -->
+        <div class="logout-section">
+            <form action="/api/logout" method="POST" id="logoutForm">
+                <button type="submit" class="logout-btn">Выйти</button>
             </form>
-            <div id="result"></div>
+        </div>
+
+        <div class="tokens-section">
+            <h2>Список токенов пользователей</h2>
+            <div id="tokensLoader" class="loader">Загрузка токенов...</div>
+            <div id="tokensList" class="tokens-list"></div>
         </div>
     </div>
 

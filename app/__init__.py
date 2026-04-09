@@ -1,9 +1,13 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from .routes import AppBlueprints
 
 import secrets
 from datetime import timedelta
+
+def error404(e):
+    return render_template("/general/error404.html"), 404
+
 class App:
     def __init__(self):
         self.bp = AppBlueprints
@@ -20,6 +24,8 @@ class App:
         self.app.register_blueprint(self.bp.general, url_prefix = "/")
         self.app.register_blueprint(self.bp.api, url_prefix = "/api")
         self.app.register_blueprint(self.bp.oauth, url_prefix = "/oauth")
-    
+        self.app.register_error_handler(404, error404)
     def run_app(self, host = "localhost", port=5000):
         self.app.run(host=host, port=port)
+
+

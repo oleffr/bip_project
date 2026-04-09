@@ -35,22 +35,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Дополнительная функциональность для кнопок авторизации (опционально)
+    // Убран обработчик для кнопки регистрации, оставлен только для кнопки входа
     const loginBtn = document.querySelector('.auth-btn.login-btn');
-    const registerBtn = document.querySelector('.auth-btn.register-btn');
 
     if (loginBtn) {
         loginBtn.addEventListener('click', function(e) {
             console.log('Пользователь нажал кнопку "Вход"');
-            // Здесь можно добавить дополнительные действия перед переходом
-            // Например: логирование в аналитику, показ загрузчика и т. д.
-        });
-    }
-
-    if (registerBtn) {
-        registerBtn.addEventListener('click', function(e) {
-            console.log('Пользователь нажал кнопку "Регистрация"');
-            // Аналогично — дополнительные действия перед переходом
         });
     }
 });

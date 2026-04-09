@@ -6,7 +6,7 @@ body {
 }
 
 .admin-container {
-    max-width: 500px;
+    max-width: 800px;
     margin: 0 auto;
     background: white;
     padding: 30px;
@@ -20,63 +20,87 @@ h1 {
     margin-bottom: 30px;
 }
 
-.check-section h2 {
-    margin-bottom: 20px;
-    color: #555;
-}
-
-#userCheckForm {
-    display: flex;
-    gap: 10px;
+.logout-section {
+    text-align: right;
     margin-bottom: 20px;
 }
 
-#username {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-button {
-    padding: 10px 20px;
-    background: #007bff;
+.logout-btn {
+    padding: 8px 16px;
+    background: #dc3545;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 0.9rem;
 }
 
-button:hover {
-    background: #0056b3;
+.logout-btn:hover {
+    background: #c82333;
 }
 
-#result {
-    padding: 10px;
-    border-radius: 4px;
+.tokens-section h2 {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.loader {
     text-align: center;
-    font-weight: bold;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
 }
 
-#result.success {
-    background: #d4edda;
-    color: #155724;
+.tokens-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-#result.error {
+.token-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+}
+
+.token-value {
+    font-family: monospace;
+    font-size: 0.9rem;
+    word-break: break-all;
+    flex: 1;
+    margin-right: 15px;
+}
+
+.copy-btn {
+    padding: 8px 16px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.copy-btn:hover {
+    background: #218837;
+}
+
+.no-tokens {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.error-message {
+    text-align: center;
+    padding: 20px;
     background: #f8d7da;
     color: #721c24;
-}
-
-.test-info {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-}
-
-.test-info h3 {
-    margin-bottom: 5px;
-    color: #666;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
 }
